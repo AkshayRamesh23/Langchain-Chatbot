@@ -40,7 +40,7 @@ def welcome_send_mail(receiver_email):
     <body>
         Hello👋,<br>
         <br>
-        Welcome to University of South Florida (USF)!How can I assist you today?<br>
+        Welcome to University of South Florida (USF)! How can I assist you today?<br>
         <br>
         If you have any questions about the MS BAIS program, USF housing options, USF on-campus employment, or immigration questions. Please feel free to ask, and I'll do my best to provide you with the information you need.<br>
         <br>
