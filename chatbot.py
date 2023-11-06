@@ -142,8 +142,8 @@ def on_click_callback():
                             verbose=True,              
                         )
                     st.session_state.history.append(                        
-                        Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\nI am loading your conversation history '{st.session_state.previous_conversation}'.\n\nWhat can I assist you with today?")
-                        #Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\n What can I assist you with today?")
+                        #Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\nI am loading your conversation history '{st.session_state.previous_conversation}'.\n\nWhat can I assist you with today?")
+                        Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\n What can I assist you with today?")
                     )
                 else:
                     st.session_state.history.append(
