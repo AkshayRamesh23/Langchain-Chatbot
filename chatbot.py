@@ -54,6 +54,7 @@ def initialize_session_state():
             openai_api_key=os.getenv("OPENAI_API_KEY"),
             model_name="gpt-3.5-turbo-16k",
             max_tokens=10000,
+            request_timeout=120,
             
         )
     if "conversation" not in st.session_state:
@@ -142,8 +143,8 @@ def on_click_callback():
                             verbose=True,              
                         )
                     st.session_state.history.append(                        
-                        Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\nI am loading your conversation history '{st.session_state.previous_conversation}'.\n\nWhat can I assist you with today?")
-                        #Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\n What can I assist you with today?")
+                        #Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\nI am loading your conversation history '{st.session_state.previous_conversation}'.\n\nWhat can I assist you with today?")
+                        Message("ai", f"Welcome back {st.session_state.name}!\n\n\nI see that you have interacted with me before.\n\n What can I assist you with today?")
                     )
                 else:
                     st.session_state.history.append(
@@ -213,9 +214,11 @@ def on_click_callback():
             print(">>>> FINISHED VECTOR STORE LOOKUP <<<<", datetime.now())
             
             # create a prompt with the human prompt and the context from the most similar documents
-            prompt = f"""[INST]Your are a University of South Florida chatbot. The name of the human is {st.session_state.name}, their U_Number is {st.session_state.u_number} and their email address is {st.session_state.email}. Based on the question give the appropriate detailed response based on the knowledge base. Only if the questions are related to MS BAIS program mention that for further inquiries please drop a mail to muma-msbais@usf.edu along with your U-number, this part is very important!!\n\n
-            When someone asks a question other than MS BAIS program do not ask them to drop mail to muma-msbais@usf.edu since this mail id is not for other things like housing, employment, immigration related information.
-            Always structure your answers in point-wise with appropriate details which is very important!!. Also, when someone asks question about other universities or things unrelated to University of South Florida please tell them that you do not have information about it and this is very important! \n\n[/INST]\n\n
+            prompt = f"""[INST]You are a friendly AI chatbot. The name of the human is {st.session_state.name} and their email is {st.session_state.email}. Your job is to assist current and incoming students
+            as they navigate their application and registration process. Their questions will include asking for information on courses, the Univeristy of South Florida (USF), the registration process, VISA and immigration details, and housing.
+            If a human asks questions not related to these areas or the information in the context provided does not have the information you need to provide the human
+            then respond with a friendly answer stating that you job is to answer questions related to the intake process at USF, and that you are not able to
+            answer the human's question. Do not say anything the words "context provided".[/INST]\n\n
         
             Context:" \n
             "{' '.join([doc.page_content for doc in similar_docs])}" \n
@@ -310,25 +313,27 @@ with prompt_placeholder:
 
 
 #chat_list=' '.join([abcd for abcd in st.session_state.history])
+
+
 chat_list=[]
 
-with st.expander("feed back"):
-    modal = Modal(key="Demo Modal",title="Feedback")
-    open_modal = st.button("Stop the bot")
-    st.write('''Contact information: Han Reichgelt\n
+#with st.expander("feed back"):
+modal = Modal(key="Demo Modal",title="Feedback")
+open_modal = st.button("Stop the bot")
+st.write('''Contact information: Han Reichgelt\n
 Graduate Coordinator, MS in Business Analytics & Information Systems\n
 School of Information Systems and Management\n
 Muma College of Business\n
 Phone: (727) 873-4786\n
 muma-msbais@usf.edu  ''')
-
-    print(st.session_state.history)
-    print(type(st.session_state.history))
+print(st.session_state.history)
+print(type(st.session_state.history))
  
-    if open_modal:
+if open_modal:
 
         #insert_conversation(email=st.session_state.email, conversation= json.dumps(extract_messages_from_buffer_mem(st.session_state.buffer_memory)))
         insert_conversation(email=st.session_state.email, conversation= json.dumps(messages_to_dict(st.session_state.conversation.memory.chat_memory.messages)))
+        #insert_conversation(email=st.session_state.email, conversation= messages_to_dict(st.session_state.conversation.memory.chat_memory.messages))
         mail.end_send_mail(st.session_state.email)
            
  
@@ -357,7 +362,8 @@ muma-msbais@usf.edu  ''')
             feedback_score='poor'
             modal.close()
 
-        st.stop()
+st.stop()
+
 # Use the function to collect feedback
 #collect_feedback_and_insert_conversation()
 
