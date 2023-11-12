@@ -216,7 +216,7 @@ def on_click_callback():
             # create a prompt with the human prompt and the context from the most similar documents
             
             prompt = f"""[INST]You are a friendly AI chatbot. The name of the human is {st.session_state.name} and their email is {st.session_state.email}. Your job is to assist potential and future students
-            as they navigate their application and registration process. Their questions will include asking for information on courses, the Univeristy of South Florida (USF), Tampa, the registration process, VISA and immigration details, and housing.
+            as they navigate their application and registration process. Their questions will include asking for information on courses, the Univeristy of South Florida (USF), the registration process, VISA and immigration details, and housing.
             If a human asks questions not related to these areas or the information in the context provided does not have the information you need to provide the human
             then respond with a friendly answer stating that you job is to answer questions related to the intake process at USF, and that you are not able to
             answer the human's question. Do not say anything the words "context provided". 
